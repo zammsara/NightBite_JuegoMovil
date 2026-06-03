@@ -56,8 +56,8 @@ class RegisterViewModel(
             return
         }
 
-        if (password.length < 6) {
-            uiState = RegisterUiState.Error("La contraseña debe tener al menos 6 caracteres.")
+        if (password.length < 8) {
+            uiState = RegisterUiState.Error("La contraseña debe tener al menos 8 caracteres.")
             return
         }
 
