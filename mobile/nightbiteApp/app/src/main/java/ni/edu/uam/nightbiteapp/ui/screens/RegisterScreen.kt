@@ -29,6 +29,7 @@ import ni.edu.uam.nightbiteapp.ui.components.NightRegisterCard
 import ni.edu.uam.nightbiteapp.ui.theme.CheeseYellow
 import ni.edu.uam.nightbiteapp.ui.theme.NeonGreen
 import ni.edu.uam.nightbiteapp.ui.theme.PizzaRed
+import ni.edu.uam.nightbiteapp.ui.validation.RegisterValidators
 import ni.edu.uam.nightbiteapp.viewmodel.RegisterUiState
 import ni.edu.uam.nightbiteapp.viewmodel.RegisterViewModel
 
@@ -52,6 +53,12 @@ fun RegisterScreen(
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var confirmPassword by remember { mutableStateOf("") }
+
+    //Estados de error
+    var usernameError by remember { mutableStateOf<String?>(null) }
+    var emailError by remember { mutableStateOf<String?>(null) }
+    var passwordError by remember { mutableStateOf<String?>(null) }
+    var confirmPasswordError by remember { mutableStateOf<String?>(null) }
 
     var showCancelRegisterDialog by remember { mutableStateOf(false) }
     var dialogTitle by remember { mutableStateOf("") }
@@ -92,10 +99,39 @@ fun RegisterScreen(
             email = email,
             password = password,
             confirmPassword = confirmPassword,
-            onUsernameChange = { username = it },
-            onEmailChange = { email = it },
-            onPasswordChange = { password = it },
-            onConfirmPasswordChange = { confirmPassword = it },
+
+            usernameError = usernameError != null,
+            emailError = emailError != null,
+            passwordError = passwordError != null,
+            confirmPasswordError = confirmPasswordError != null,
+
+            onUsernameChange = { username = it
+
+                usernameError =
+                    RegisterValidators.validateUsername(it) },
+            onEmailChange = { val normalizedEmail = it.lowercase()
+
+                email = normalizedEmail
+
+                emailError =
+                    RegisterValidators.validateEmail(normalizedEmail) },
+            onPasswordChange = { password = it
+
+                passwordError =
+                    RegisterValidators.validatePassword(it)
+
+                confirmPasswordError =
+                    RegisterValidators.validateConfirmPassword(
+                        password = it,
+                        confirmPassword = confirmPassword
+                    ) },
+            onConfirmPasswordChange = { confirmPassword = it
+
+                confirmPasswordError =
+                    RegisterValidators.validateConfirmPassword(
+                        password = password,
+                        confirmPassword = it
+                    ) },
             onRegisterClick = {
                 registerViewModel.registerUser(
                     username = username,
