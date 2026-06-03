@@ -182,15 +182,26 @@ fun RegisterScreen(
                 confirmPasswordError = error
 
                 showValidationMessage(error) },
+            /**
+             * Ejecuta todas las validaciones visuales antes
+             * de enviar la información al ViewModel.
+             */
             onRegisterClick = {
+
                 usernameError =
-                    RegisterValidators.validateUsername(username)
+                    RegisterValidators.validateUsername(
+                        username
+                    )
 
                 emailError =
-                    RegisterValidators.validateEmail(email)
+                    RegisterValidators.validateEmail(
+                        email
+                    )
 
                 passwordError =
-                    RegisterValidators.validatePassword(password)
+                    RegisterValidators.validatePassword(
+                        password
+                    )
 
                 confirmPasswordError =
                     RegisterValidators.validateConfirmPassword(
@@ -198,18 +209,20 @@ fun RegisterScreen(
                         confirmPassword = confirmPassword
                     )
 
-                if (
+                val hasErrors =
                     usernameError != null ||
-                    emailError != null ||
-                    passwordError != null ||
-                    confirmPasswordError != null
-                ) {
+                            emailError != null ||
+                            passwordError != null ||
+                            confirmPasswordError != null
 
-                    floatingMessage =
+                if (hasErrors) {
+
+                    showValidationMessage(
                         usernameError
                             ?: emailError
-                                    ?: passwordError
-                                    ?: confirmPasswordError
+                            ?: passwordError
+                            ?: confirmPasswordError
+                    )
 
                     return@NightRegisterCard
                 }
