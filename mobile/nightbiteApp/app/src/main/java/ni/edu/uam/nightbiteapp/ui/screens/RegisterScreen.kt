@@ -183,6 +183,37 @@ fun RegisterScreen(
 
                 showValidationMessage(error) },
             onRegisterClick = {
+                usernameError =
+                    RegisterValidators.validateUsername(username)
+
+                emailError =
+                    RegisterValidators.validateEmail(email)
+
+                passwordError =
+                    RegisterValidators.validatePassword(password)
+
+                confirmPasswordError =
+                    RegisterValidators.validateConfirmPassword(
+                        password = password,
+                        confirmPassword = confirmPassword
+                    )
+
+                if (
+                    usernameError != null ||
+                    emailError != null ||
+                    passwordError != null ||
+                    confirmPasswordError != null
+                ) {
+
+                    floatingMessage =
+                        usernameError
+                            ?: emailError
+                                    ?: passwordError
+                                    ?: confirmPasswordError
+
+                    return@NightRegisterCard
+                }
+
                 registerViewModel.registerUser(
                     username = username,
                     email = email,
