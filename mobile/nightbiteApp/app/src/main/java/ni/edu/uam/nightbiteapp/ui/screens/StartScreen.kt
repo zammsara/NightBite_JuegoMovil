@@ -1,6 +1,5 @@
 package ni.edu.uam.nightbiteapp.ui.screens
 
-import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.RepeatMode
 import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.infiniteRepeatable
@@ -21,7 +20,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import ni.edu.uam.nightbiteapp.ui.components.PixelGameTitle
 import ni.edu.uam.nightbiteapp.ui.components.PressStartButton
-import ni.edu.uam.nightbiteapp.ui.components.StartPixelBackground
+import ni.edu.uam.nightbiteapp.ui.model.StartPixelBackground
 
 /**
  * Pantalla inicial del videojuego.
