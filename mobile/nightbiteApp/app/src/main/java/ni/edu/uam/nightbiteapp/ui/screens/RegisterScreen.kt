@@ -53,9 +53,6 @@ fun RegisterScreen(
     var passwordError by remember { mutableStateOf<String?>(null) }
     var confirmPasswordError by remember { mutableStateOf<String?>(null) }
 
-    var floatingMessage by remember { mutableStateOf<String?>(null) }
-    var lastShownError by remember { mutableStateOf<String?>(null) }
-
     var showCancelRegisterDialog by remember { mutableStateOf(false) }
     var dialogTitle by remember { mutableStateOf("") }
     var dialogMessage by remember { mutableStateOf("") }
@@ -81,19 +78,6 @@ fun RegisterScreen(
         }
     }
 
-    LaunchedEffect(floatingMessage) {
-        if (floatingMessage != null) {
-            delay(3000)
-            floatingMessage = null
-        }
-    }
-
-    fun showValidationMessage(error: String?) {
-        if (error != null && error != lastShownError) {
-            floatingMessage = error
-            lastShownError = error
-        }
-    }
 
     Box(
         modifier = Modifier
@@ -130,7 +114,6 @@ fun RegisterScreen(
 
                     val error = Validators.validateUsername(it)
                     usernameError = error
-                    showValidationMessage(error)
                 },
 
                 onEmailChange = {
@@ -139,7 +122,6 @@ fun RegisterScreen(
 
                     val error = Validators.validateEmail(normalizedEmail)
                     emailError = error
-                    showValidationMessage(error)
                 },
 
                 onPasswordChange = {
@@ -149,7 +131,6 @@ fun RegisterScreen(
                         Validators.validatePassword(it)
 
                     passwordError = passwordValidation
-                    showValidationMessage(passwordValidation)
 
                     val confirmValidation =
                         Validators.validateConfirmPassword(
@@ -158,7 +139,6 @@ fun RegisterScreen(
                         )
 
                     confirmPasswordError = confirmValidation
-                    showValidationMessage(confirmValidation)
                 },
 
                 onConfirmPasswordChange = {
@@ -171,7 +151,6 @@ fun RegisterScreen(
                         )
 
                     confirmPasswordError = error
-                    showValidationMessage(error)
                 },
 
                 onRegisterClick = {
@@ -197,15 +176,9 @@ fun RegisterScreen(
                                 confirmPasswordError != null
 
                     if (hasErrors) {
-                        showValidationMessage(
-                            usernameError
-                                ?: emailError
-                                ?: passwordError
-                                ?: confirmPasswordError
-                        )
-
                         return@NightRegisterCard
                     }
+
 
                     registerViewModel.registerUser(
                         username = username,
@@ -282,20 +255,6 @@ fun RegisterScreen(
             RegisterDialogType.None -> Unit
         }
 
-        floatingMessage?.let { message ->
-            Box(
-                modifier = Modifier.fillMaxSize(),
-                contentAlignment = Alignment.TopStart
-            ) {
-                NightFloatingMessage(
-                    message = message,
-                    modifier = Modifier.padding(
-                        start = 20.dp,
-                        top = 8.dp
-                    )
-                )
-            }
-        }
     }
 }
 
