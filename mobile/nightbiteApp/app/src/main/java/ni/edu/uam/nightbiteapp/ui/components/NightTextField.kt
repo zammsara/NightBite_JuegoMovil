@@ -110,7 +110,7 @@ fun NightTextField(
             ),
             modifier = Modifier
                 .fillMaxWidth()
-                .height(fieldHeight)
+                //.height(fieldHeight)
         )
 
         if (reserveErrorSpace) {
