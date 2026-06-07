@@ -5,6 +5,9 @@ import ni.edu.uam.nightbiteapp.data.remote.dto.PlayerResponse
 import ni.edu.uam.nightbiteapp.data.remote.dto.UserLoginRequest
 import ni.edu.uam.nightbiteapp.data.remote.dto.UserRegisterRequest
 import ni.edu.uam.nightbiteapp.data.remote.dto.UserResponse
+import ni.edu.uam.nightbiteapp.data.remote.dto.UpdatePasswordRequest
+import ni.edu.uam.nightbiteapp.data.remote.dto.UpdateUsernameRequest
+import retrofit2.http.PUT
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -37,6 +40,11 @@ interface ApiService {
     @GET("api/users")
     suspend fun getUsers(): Response<List<UserResponse>>
 
+    @GET("api/users/{id}")
+    suspend fun getUserById(
+        @Path("id") id: Long
+    ): Response<UserResponse>
+
     @POST("api/users/register")
     suspend fun registerUser(
         @Body userRegisterRequest: UserRegisterRequest
@@ -45,5 +53,17 @@ interface ApiService {
     @POST("api/users/login")
     suspend fun loginUser(
         @Body userLoginRequest: UserLoginRequest
+    ): Response<UserResponse>
+
+    @PUT("api/users/{id}/username")
+    suspend fun updateUsername(
+        @Path("id") id: Long,
+        @Body request: UpdateUsernameRequest
+    ): Response<UserResponse>
+
+    @PUT("api/users/{id}/password")
+    suspend fun updatePassword(
+        @Path("id") id: Long,
+        @Body request: UpdatePasswordRequest
     ): Response<UserResponse>
 }
