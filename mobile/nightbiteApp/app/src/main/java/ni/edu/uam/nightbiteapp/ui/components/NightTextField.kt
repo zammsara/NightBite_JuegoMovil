@@ -40,8 +40,7 @@ fun NightTextField(
     trailingIcon: ImageVector? = null,
     trailingIconDescription: String? = null,
     onTrailingIconClick: (() -> Unit)? = null,
-    reserveErrorSpace: Boolean = false,
-    fieldHeight: Dp = 60.dp
+    reserveErrorSpace: Boolean = false
 ) {
     Column(
         modifier = modifier
@@ -110,7 +109,6 @@ fun NightTextField(
             ),
             modifier = Modifier
                 .fillMaxWidth()
-                //.height(fieldHeight)
         )
 
         if (reserveErrorSpace) {
