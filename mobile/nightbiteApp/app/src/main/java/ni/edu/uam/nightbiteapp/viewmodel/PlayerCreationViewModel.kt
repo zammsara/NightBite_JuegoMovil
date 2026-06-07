@@ -10,6 +10,7 @@ import kotlinx.coroutines.launch
 import ni.edu.uam.nightbiteapp.data.local.session.SessionManager
 import ni.edu.uam.nightbiteapp.data.remote.dto.PlayerRequest
 import ni.edu.uam.nightbiteapp.data.repository.PlayerRepository
+import ni.edu.uam.nightbiteapp.ui.validation.Validators
 
 class PlayerCreationViewModel(
     private val sessionManager: SessionManager,
@@ -71,13 +72,17 @@ class PlayerCreationViewModel(
     fun createPlayer() {
         val currentState = _uiState.value
 
-        if (currentState.nickname.isBlank()) {
-            showError("Ingresa el apodo del repartidor.")
+        Validators.validateNickname(
+            currentState.nickname
+        )?.let { error ->
+            showError(error)
             return
         }
 
-        if (currentState.driverName.isBlank()) {
-            showError("Ingresa el nombre del repartidor.")
+        Validators.validateDriverName(
+            currentState.driverName
+        )?.let { error ->
+            showError(error)
             return
         }
 
