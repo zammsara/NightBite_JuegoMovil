@@ -111,9 +111,19 @@ fun PlayerCreationScreen(
         OutlinedTextField(
             value = uiState.nickname,
             onValueChange = viewModel::onNicknameChange,
+
+            isError = uiState.nicknameError != null,
+
             label = {
-                Text(text = "Apodo del repartidor")
+                Text("Apodo del repartidor")
             },
+
+            supportingText = {
+                uiState.nicknameError?.let {
+                    Text(it)
+                }
+            },
+
             singleLine = true,
             modifier = Modifier.fillMaxWidth()
         )
@@ -123,9 +133,19 @@ fun PlayerCreationScreen(
         OutlinedTextField(
             value = uiState.driverName,
             onValueChange = viewModel::onDriverNameChange,
+
+            isError = uiState.driverNameError != null,
+
             label = {
-                Text(text = "Nombre del repartidor")
+                Text("Nombre del repartidor")
             },
+
+            supportingText = {
+                uiState.driverNameError?.let {
+                    Text(it)
+                }
+            },
+
             singleLine = true,
             modifier = Modifier.fillMaxWidth()
         )

@@ -28,6 +28,7 @@ class PlayerCreationViewModel(
         _uiState.update {
             it.copy(
                 nickname = value,
+                nicknameError = null,
                 errorMessage = null
             )
         }
@@ -37,6 +38,7 @@ class PlayerCreationViewModel(
         _uiState.update {
             it.copy(
                 driverName = value,
+                driverNameError = null,
                 errorMessage = null
             )
         }
@@ -72,17 +74,28 @@ class PlayerCreationViewModel(
     fun createPlayer() {
         val currentState = _uiState.value
 
-        Validators.validateNickname(
-            currentState.nickname
-        )?.let { error ->
-            showError(error)
-            return
-        }
+        val nicknameError =
+            Validators.validateNickname(
+                currentState.nickname
+            )
 
-        Validators.validateDriverName(
-            currentState.driverName
-        )?.let { error ->
-            showError(error)
+        val driverNameError =
+            Validators.validateDriverName(
+                currentState.driverName
+            )
+
+        if (
+            nicknameError != null ||
+            driverNameError != null
+        ) {
+
+            _uiState.update {
+                it.copy(
+                    nicknameError = nicknameError,
+                    driverNameError = driverNameError
+                )
+            }
+
             return
         }
 
