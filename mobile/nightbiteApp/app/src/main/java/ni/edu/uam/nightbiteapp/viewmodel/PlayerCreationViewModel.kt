@@ -25,20 +25,26 @@ class PlayerCreationViewModel(
     val motorcycleTypeOptions = listOf("Estándar", "Scooter", "Deportiva", "Retro", "Delivery")
 
     fun onNicknameChange(value: String) {
+        val validationError =
+            Validators.validateNickname(value)
+
         _uiState.update {
             it.copy(
                 nickname = value,
-                nicknameError = null,
+                nicknameError = validationError,
                 errorMessage = null
             )
         }
     }
 
     fun onDriverNameChange(value: String) {
+        val validationError =
+            Validators.validateDriverName(value)
+
         _uiState.update {
             it.copy(
                 driverName = value,
-                driverNameError = null,
+                driverNameError = validationError,
                 errorMessage = null
             )
         }
