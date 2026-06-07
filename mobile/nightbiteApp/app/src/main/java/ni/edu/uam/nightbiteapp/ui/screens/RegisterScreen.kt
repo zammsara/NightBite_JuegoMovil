@@ -31,7 +31,7 @@ import ni.edu.uam.nightbiteapp.ui.components.NightRegisterCard
 import ni.edu.uam.nightbiteapp.ui.theme.CheeseYellow
 import ni.edu.uam.nightbiteapp.ui.theme.NeonGreen
 import ni.edu.uam.nightbiteapp.ui.theme.PizzaRed
-import ni.edu.uam.nightbiteapp.ui.validation.RegisterValidators
+import ni.edu.uam.nightbiteapp.ui.validation.Validators
 import ni.edu.uam.nightbiteapp.viewmodel.RegisterUiState
 import ni.edu.uam.nightbiteapp.viewmodel.RegisterViewModel
 
@@ -128,7 +128,7 @@ fun RegisterScreen(
                 onUsernameChange = {
                     username = it
 
-                    val error = RegisterValidators.validateUsername(it)
+                    val error = Validators.validateUsername(it)
                     usernameError = error
                     showValidationMessage(error)
                 },
@@ -137,7 +137,7 @@ fun RegisterScreen(
                     val normalizedEmail = it.lowercase()
                     email = normalizedEmail
 
-                    val error = RegisterValidators.validateEmail(normalizedEmail)
+                    val error = Validators.validateEmail(normalizedEmail)
                     emailError = error
                     showValidationMessage(error)
                 },
@@ -146,13 +146,13 @@ fun RegisterScreen(
                     password = it
 
                     val passwordValidation =
-                        RegisterValidators.validatePassword(it)
+                        Validators.validatePassword(it)
 
                     passwordError = passwordValidation
                     showValidationMessage(passwordValidation)
 
                     val confirmValidation =
-                        RegisterValidators.validateConfirmPassword(
+                        Validators.validateConfirmPassword(
                             password = it,
                             confirmPassword = confirmPassword
                         )
@@ -165,7 +165,7 @@ fun RegisterScreen(
                     confirmPassword = it
 
                     val error =
-                        RegisterValidators.validateConfirmPassword(
+                        Validators.validateConfirmPassword(
                             password = password,
                             confirmPassword = it
                         )
@@ -176,16 +176,16 @@ fun RegisterScreen(
 
                 onRegisterClick = {
                     usernameError =
-                        RegisterValidators.validateUsername(username)
+                        Validators.validateUsername(username)
 
                     emailError =
-                        RegisterValidators.validateEmail(email)
+                        Validators.validateEmail(email)
 
                     passwordError =
-                        RegisterValidators.validatePassword(password)
+                        Validators.validatePassword(password)
 
                     confirmPasswordError =
-                        RegisterValidators.validateConfirmPassword(
+                        Validators.validateConfirmPassword(
                             password = password,
                             confirmPassword = confirmPassword
                         )
