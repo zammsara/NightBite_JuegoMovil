@@ -131,7 +131,6 @@ fun NightRegisterCard(
                         isError = usernameError != null,
                         errorMessage = usernameError,
                         reserveErrorSpace = true,
-                        fieldHeight = 48.dp,
                         modifier = Modifier.width(300.dp)
                     )
 
@@ -145,7 +144,6 @@ fun NightRegisterCard(
                         isError = emailError != null,
                         errorMessage = emailError,
                         reserveErrorSpace = true,
-                        fieldHeight = 48.dp,
                         modifier = Modifier.width(300.dp)
                     )
 
@@ -177,7 +175,6 @@ fun NightRegisterCard(
                         isError = passwordError != null,
                         errorMessage = passwordError,
                         reserveErrorSpace = true,
-                        fieldHeight = 48.dp,
                         modifier = Modifier.width(300.dp)
                     )
 
@@ -209,7 +206,6 @@ fun NightRegisterCard(
                         isError = confirmPasswordError != null,
                         errorMessage = confirmPasswordError,
                         reserveErrorSpace = true,
-                        fieldHeight = 48.dp,
                         modifier = Modifier.width(300.dp)
                     )
                 }
