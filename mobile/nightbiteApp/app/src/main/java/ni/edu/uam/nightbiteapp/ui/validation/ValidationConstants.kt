@@ -21,6 +21,6 @@ object ValidationConstants {
     const val NICKNAME_MAX_LENGTH = 16
 
     // Nombre del repartidor
-    const val DRIVER_NAME_MIN_LENGTH = 3
+    const val DRIVER_NAME_MIN_LENGTH = 2
     const val DRIVER_NAME_MAX_LENGTH = 50
 }
