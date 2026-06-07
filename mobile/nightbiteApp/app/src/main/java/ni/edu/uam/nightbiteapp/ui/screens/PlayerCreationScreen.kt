@@ -181,6 +181,13 @@ fun PlayerCreationScreen(
                         }
                     )
 
+                    uiState.genderError?.let {
+                        Text(
+                            text = it,
+                            color = MaterialTheme.colorScheme.error
+                        )
+                    }
+
                     Spacer(modifier = Modifier.width(8.dp))
 
                     Text(text = option)
@@ -197,6 +204,13 @@ fun PlayerCreationScreen(
             onOptionSelected = viewModel::onHelmetColorSelected
         )
 
+        uiState.helmetColorError?.let {
+            Text(
+                text = it,
+                color = MaterialTheme.colorScheme.error
+            )
+        }
+
         Spacer(modifier = Modifier.height(12.dp))
 
         PlayerDropdownField(
@@ -205,6 +219,13 @@ fun PlayerCreationScreen(
             options = viewModel.motorcycleTypeOptions,
             onOptionSelected = viewModel::onMotorcycleTypeSelected
         )
+
+        uiState.motorcycleTypeError?.let {
+            Text(
+                text = it,
+                color = MaterialTheme.colorScheme.error
+            )
+        }
 
         Spacer(modifier = Modifier.height(24.dp))
 

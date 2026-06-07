@@ -54,6 +54,7 @@ class PlayerCreationViewModel(
         _uiState.update {
             it.copy(
                 gender = value,
+                genderError = null,
                 errorMessage = null
             )
         }
@@ -63,6 +64,7 @@ class PlayerCreationViewModel(
         _uiState.update {
             it.copy(
                 helmetColor = value,
+                helmetColorError = null,
                 errorMessage = null
             )
         }
@@ -72,6 +74,7 @@ class PlayerCreationViewModel(
         _uiState.update {
             it.copy(
                 motorcycleType = value,
+                motorcycleTypeError = null,
                 errorMessage = null
             )
         }
@@ -105,18 +108,41 @@ class PlayerCreationViewModel(
             return
         }
 
-        if (currentState.gender.isBlank()) {
-            showError("Selecciona el género.")
-            return
-        }
+        val genderError =
+            if (currentState.gender.isBlank()) {
+                "Selecciona el género."
+            } else {
+                null
+            }
 
-        if (currentState.helmetColor.isBlank()) {
-            showError("Selecciona el color del casco.")
-            return
-        }
+        val helmetColorError =
+            if (currentState.helmetColor.isBlank()) {
+                "Selecciona el color del casco."
+            } else {
+                null
+            }
 
-        if (currentState.motorcycleType.isBlank()) {
-            showError("Selecciona el tipo de moto.")
+        val motorcycleTypeError =
+            if (currentState.motorcycleType.isBlank()) {
+                "Selecciona el tipo de moto."
+            } else {
+                null
+            }
+
+        if (
+            genderError != null ||
+            helmetColorError != null ||
+            motorcycleTypeError != null
+        ) {
+
+            _uiState.update {
+                it.copy(
+                    genderError = genderError,
+                    helmetColorError = helmetColorError,
+                    motorcycleTypeError = motorcycleTypeError
+                )
+            }
+
             return
         }
 

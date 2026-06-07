@@ -11,6 +11,10 @@ data class PlayerCreationUiState(
     val helmetColor: String = "",
     val motorcycleType: String = "",
 
+    val genderError: String? = null,
+    val helmetColorError: String? = null,
+    val motorcycleTypeError: String? = null,
+
     val isLoading: Boolean = false,
     val errorMessage: String? = null,
     val isPlayerCreated: Boolean = false
