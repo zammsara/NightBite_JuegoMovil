@@ -32,3 +32,15 @@ val InputBackground = Color(0xFFF4F4F8)
 
 val LoginTabCyan = Color(0xFF5CE1E6)
 val LoginTabBorder = Color(0xFF2AA0A5)
+
+// Colores para SettingsScreen tipo panel lateral
+val SettingsPanelPink = Color(0xFFD86D9A)
+val SettingsPanelLightPink = Color(0xFFF6CADB)
+val SettingsPanelDarkPink = Color(0xFF8B315F)
+val SettingsTabPink = Color(0xFFE993B7)
+val SettingsCardDark = Color(0xFF10083D)
+val SettingsCardLight = Color(0xFFD9CCFF)
+val SettingsCream = Color(0xFFFFF1C2)
+val SettingsTextDark = Color(0xFF2A1534)
+val SettingsDangerPink = Color(0xFFFF8FB7)
+val SettingsOverlay = Color(0xAA000000)

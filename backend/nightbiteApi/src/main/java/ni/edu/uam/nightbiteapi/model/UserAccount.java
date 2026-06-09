@@ -11,7 +11,7 @@ public class UserAccount {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, unique = true, length = 50)
+    @Column(nullable = false, unique = true, length = 16)
     private String username;
 
     @Column(nullable = false, unique = true, length = 100)
@@ -25,6 +25,13 @@ public class UserAccount {
 
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
+
+    @OneToOne(
+            mappedBy = "userAccount",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    private Player player;
 
     public UserAccount() {
     }
@@ -89,5 +96,13 @@ public class UserAccount {
 
     public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
+    }
+
+    public Player getPlayer() {
+        return player;
+    }
+
+    public void setPlayer(Player player) {
+        this.player = player;
     }
 }

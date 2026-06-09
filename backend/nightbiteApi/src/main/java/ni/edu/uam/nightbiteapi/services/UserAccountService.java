@@ -58,8 +58,8 @@ public class UserAccountService {
         }
 
         UserAccount user = new UserAccount();
-        user.setUsername(request.getUsername().trim());
-        user.setEmail(request.getEmail().trim());
+        user.setUsername(request.getUsername().trim().toLowerCase());
+        user.setEmail(request.getEmail().trim().toLowerCase());
         user.setAge(request.getAge());
         user.setPasswordHash(passwordEncoder.encode(request.getPassword()));
 
@@ -70,11 +70,11 @@ public class UserAccountService {
 
     public UserResponse loginUser(UserLoginRequest request) {
         if (request.getUsernameOrEmail() == null || request.getUsernameOrEmail().isBlank()) {
-            throw new RuntimeException("Ingresa usuario o correo");
+            throw new RuntimeException("Campos incompletos");
         }
 
         if (request.getPassword() == null || request.getPassword().isBlank()) {
-            throw new RuntimeException("Ingresa la contraseña");
+            throw new RuntimeException("Campos incompletos");
         }
 
         UserAccount user = userAccountRepository
@@ -82,7 +82,7 @@ public class UserAccountService {
                         request.getUsernameOrEmail().trim(),
                         request.getUsernameOrEmail().trim()
                 )
-                .orElseThrow(() -> new RuntimeException("Credenciales inválidas"));
+                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
 
         boolean passwordMatches = passwordEncoder.matches(
                 request.getPassword(),
@@ -90,7 +90,7 @@ public class UserAccountService {
         );
 
         if (!passwordMatches) {
-            throw new RuntimeException("Credenciales inválidas");
+            throw new RuntimeException("Usuario o contraseña incorrectos");
         }
 
         return mapToResponseWithPlayer(user);
@@ -102,7 +102,7 @@ public class UserAccountService {
 
         validateUpdateUsernameRequest(request);
 
-        String newUsername = request.getNewUsername().trim();
+        String newUsername = request.getNewUsername().trim().toLowerCase();
 
         if (user.getUsername().equals(newUsername)) {
             throw new RuntimeException("El nuevo nombre de usuario debe ser diferente al actual");
@@ -148,45 +148,106 @@ public class UserAccountService {
         userAccountRepository.save(user);
     }
 
-    private void validateUpdateUsernameRequest(UpdateUsernameRequest request) {
-        if (request.getNewUsername() == null || request.getNewUsername().isBlank()) {
-            throw new RuntimeException("El nuevo nombre de usuario es obligatorio");
+    public boolean deleteUser(Long id) {
+        Optional<UserAccount> optionalUser = userAccountRepository.findById(id);
+
+        if (optionalUser.isEmpty()) {
+            return false;
         }
 
-        String newUsername = request.getNewUsername().trim();
+        UserAccount user = optionalUser.get();
 
-        if (newUsername.contains(" ")) {
+        userAccountRepository.delete(user);
+
+        return true;
+    }
+
+    private void validateUsername(String username) {
+        if (username == null || username.isBlank()) {
+            throw new RuntimeException("El nombre de usuario es obligatorio");
+        }
+
+        String normalizedUsername = username.trim();
+
+        if (normalizedUsername.contains(" ")) {
             throw new RuntimeException("El nombre de usuario no debe contener espacios");
         }
 
-        if (!newUsername.equals(newUsername.toLowerCase())) {
+        if (!normalizedUsername.equals(normalizedUsername.toLowerCase())) {
             throw new RuntimeException("El nombre de usuario debe estar en minúsculas");
         }
 
-        if (newUsername.length() > 16) {
+        if (normalizedUsername.length() > 16) {
             throw new RuntimeException("El nombre de usuario no debe superar los 16 caracteres");
         }
 
-        if (!newUsername.matches("^[a-z0-9_]+$")) {
+        if (!normalizedUsername.matches("^[a-z0-9_]+$")) {
             throw new RuntimeException("El nombre de usuario solo puede contener letras minúsculas, números y guion bajo");
         }
     }
 
-    private void validateUpdatePasswordRequest(UpdatePasswordRequest request) {
-        if (request.getCurrentPassword() == null || request.getCurrentPassword().isBlank()) {
-            throw new RuntimeException("La contraseña actual es obligatoria");
+    private void validateEmail(String email) {
+        if (email == null || email.isBlank()) {
+            throw new RuntimeException("El correo es obligatorio");
         }
 
-        if (request.getNewPassword() == null || request.getNewPassword().isBlank()) {
-            throw new RuntimeException("La nueva contraseña es obligatoria");
+        String normalizedEmail = email.trim();
+
+        if (normalizedEmail.contains(" ")) {
+            throw new RuntimeException("El correo no debe contener espacios");
         }
+
+        if (!normalizedEmail.equals(normalizedEmail.toLowerCase())) {
+            throw new RuntimeException("El correo debe estar en minúsculas");
+        }
+
+        if (normalizedEmail.length() > 100) {
+            throw new RuntimeException("El correo no debe superar los 100 caracteres");
+        }
+
+        if (!normalizedEmail.matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$")) {
+            throw new RuntimeException("Ingresa un correo electrónico válido");
+        }
+    }
+
+    private void validatePassword(String password, String fieldName) {
+        if (password == null || password.isBlank()) {
+            throw new RuntimeException(fieldName + " es obligatoria");
+        }
+
+        if (password.length() < 8) {
+            throw new RuntimeException(fieldName + " debe tener al menos 8 caracteres");
+        }
+
+        if (password.length() > 50) {
+            throw new RuntimeException(fieldName + " no debe superar los 50 caracteres");
+        }
+
+        if (password.startsWith(" ") || password.endsWith(" ")) {
+            throw new RuntimeException(fieldName + " no puede iniciar ni terminar con espacios");
+        }
+    }
+
+    private void validateAge(Integer age) {
+        if (age == null) {
+            throw new RuntimeException("La edad es obligatoria");
+        }
+
+        if (age < 13) {
+            throw new RuntimeException("Debes tener 13 años o más para crear una cuenta");
+        }
+    }
+
+    private void validateUpdateUsernameRequest(UpdateUsernameRequest request) {
+        validateUsername(request.getNewUsername());
+    }
+
+    private void validateUpdatePasswordRequest(UpdatePasswordRequest request) {
+        validatePassword(request.getCurrentPassword(), "La contraseña actual");
+        validatePassword(request.getNewPassword(), "La nueva contraseña");
 
         if (request.getConfirmPassword() == null || request.getConfirmPassword().isBlank()) {
             throw new RuntimeException("La confirmación de contraseña es obligatoria");
-        }
-
-        if (request.getNewPassword().length() < 8) {
-            throw new RuntimeException("La nueva contraseña debe tener al menos 8 caracteres");
         }
 
         if (!request.getNewPassword().equals(request.getConfirmPassword())) {
@@ -195,29 +256,10 @@ public class UserAccountService {
     }
 
     private void validateRegisterRequest(UserRegisterRequest request) {
-        if (request.getUsername() == null || request.getUsername().isBlank()) {
-            throw new RuntimeException("El nombre de usuario es obligatorio");
-        }
-
-        if (request.getEmail() == null || request.getEmail().isBlank()) {
-            throw new RuntimeException("El correo es obligatorio");
-        }
-
-        if (request.getPassword() == null || request.getPassword().isBlank()) {
-            throw new RuntimeException("La contraseña es obligatoria");
-        }
-
-        if (request.getPassword().length() < 8) {
-            throw new RuntimeException("La contraseña debe tener al menos 8 caracteres");
-        }
-
-        if (request.getAge() == null) {
-            throw new RuntimeException("La edad es obligatoria");
-        }
-
-        if (request.getAge() < 13) {
-            throw new RuntimeException("Debes tener 13 años o más para crear una cuenta");
-        }
+        validateUsername(request.getUsername());
+        validateEmail(request.getEmail());
+        validatePassword(request.getPassword(), "La contraseña");
+        validateAge(request.getAge());
     }
 
     private UserResponse mapToResponseWithPlayer(UserAccount user) {

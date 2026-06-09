@@ -3,7 +3,6 @@ package ni.edu.uam.nightbiteapp.ui.components
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -31,14 +30,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Shadow
-import androidx.compose.ui.text.SpanStyle
-import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
-import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.withStyle
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import ni.edu.uam.nightbiteapp.ui.theme.DarkPurple
@@ -60,12 +56,6 @@ fun NightLoginCard(
         mutableStateOf(false)
     }
 
-    val usernameError =
-        username.isNotBlank() && username.length < 3
-
-    val passwordError =
-        password.isNotBlank() && password.length < 4
-
     Card(
         shape = RoundedCornerShape(34.dp),
         border = BorderStroke(
@@ -77,18 +67,18 @@ fun NightLoginCard(
         ),
         elevation = CardDefaults.cardElevation(defaultElevation = 10.dp),
         modifier = modifier.widthIn(
-            min = 430.dp,
-            max = 520.dp
+            min = 390.dp,
+            max = 400.dp
         )
     ) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(
-                    start = 42.dp,
-                    end = 42.dp,
-                    top = 24.dp,
-                    bottom = 24.dp
+                    start = 34.dp,
+                    end = 34.dp,
+                    top = 22.dp,
+                    bottom = 22.dp
                 ),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
@@ -119,19 +109,21 @@ fun NightLoginCard(
                 textAlign = TextAlign.Center
             )
 
-            Spacer(modifier = Modifier.height(24.dp))
+            Spacer(modifier = Modifier.height(18.dp))
 
             NightTextField(
                 value = username,
                 onValueChange = onUsernameChange,
                 label = "Usuario o correo",
                 icon = Icons.Default.Person,
-                isError = usernameError,
-                errorMessage = "Debe tener al menos 3 caracteres.",
-                modifier = Modifier.width(330.dp)
+                isError = false,
+                errorMessage = null,
+                reserveErrorSpace = false,
+                fieldHeight = 54.dp,
+                modifier = Modifier.width(285.dp)
             )
 
-            Spacer(modifier = Modifier.height(12.dp))
+            Spacer(modifier = Modifier.height(10.dp))
 
             NightTextField(
                 value = password,
@@ -156,9 +148,11 @@ fun NightLoginCard(
                 onTrailingIconClick = {
                     passwordVisible = !passwordVisible
                 },
-                isError = passwordError,
-                errorMessage = "La contraseña debe tener al menos 4 caracteres.",
-                modifier = Modifier.width(330.dp)
+                isError = false,
+                errorMessage = null,
+                reserveErrorSpace = false,
+                fieldHeight = 54.dp,
+                modifier = Modifier.width(285.dp)
             )
 
             Spacer(modifier = Modifier.height(18.dp))

@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
@@ -24,6 +25,7 @@ import ni.edu.uam.nightbiteapp.ui.theme.CheeseYellow
 import ni.edu.uam.nightbiteapp.ui.theme.DarkText
 import ni.edu.uam.nightbiteapp.ui.theme.FieldBackground
 import ni.edu.uam.nightbiteapp.ui.theme.LavenderGray
+import ni.edu.uam.nightbiteapp.ui.theme.NeonGreen
 import ni.edu.uam.nightbiteapp.ui.theme.NightSurface
 import ni.edu.uam.nightbiteapp.ui.theme.PizzaRed
 
@@ -36,12 +38,31 @@ fun NightTextField(
     modifier: Modifier = Modifier,
     visualTransformation: VisualTransformation = VisualTransformation.None,
     isError: Boolean = false,
+    isSuccess: Boolean = false,
     errorMessage: String? = null,
     trailingIcon: ImageVector? = null,
     trailingIconDescription: String? = null,
     onTrailingIconClick: (() -> Unit)? = null,
     reserveErrorSpace: Boolean = false
 ) {
+    val indicatorColor = when {
+        isError -> PizzaRed
+        isSuccess -> NeonGreen
+        else -> CheeseYellow
+    }
+
+    val leadingIconColor = when {
+        isError -> PizzaRed
+        isSuccess -> NeonGreen
+        else -> NightSurface
+    }
+
+    val trailingIconColor = when {
+        isError -> PizzaRed
+        isSuccess -> NeonGreen
+        else -> NightSurface
+    }
+
     Column(
         modifier = modifier
     ) {
@@ -84,20 +105,20 @@ fun NightTextField(
                 disabledContainerColor = FieldBackground,
                 errorContainerColor = FieldBackground,
 
-                focusedIndicatorColor = if (isError) PizzaRed else CheeseYellow,
-                unfocusedIndicatorColor = if (isError) PizzaRed else CheeseYellow,
+                focusedIndicatorColor = indicatorColor,
+                unfocusedIndicatorColor = indicatorColor,
                 errorIndicatorColor = PizzaRed,
 
                 focusedTextColor = DarkText,
                 unfocusedTextColor = DarkText,
                 errorTextColor = DarkText,
 
-                focusedLeadingIconColor = NightSurface,
-                unfocusedLeadingIconColor = LavenderGray,
+                focusedLeadingIconColor = leadingIconColor,
+                unfocusedLeadingIconColor = leadingIconColor,
                 errorLeadingIconColor = PizzaRed,
 
-                focusedTrailingIconColor = NightSurface,
-                unfocusedTrailingIconColor = LavenderGray,
+                focusedTrailingIconColor = trailingIconColor,
+                unfocusedTrailingIconColor = trailingIconColor,
                 errorTrailingIconColor = PizzaRed,
 
                 focusedPlaceholderColor = LavenderGray,
@@ -122,7 +143,8 @@ fun NightTextField(
                     Text(
                         text = errorMessage,
                         color = PizzaRed,
-                        fontSize = 10.sp
+                        fontSize = 10.sp,
+                        modifier = Modifier.padding(start = 22.dp)
                     )
                 }
             }
@@ -134,7 +156,9 @@ fun NightTextField(
                     text = errorMessage,
                     color = PizzaRed,
                     fontSize = 10.sp,
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(start = 36.dp)
                 )
             }
         }

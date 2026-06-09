@@ -10,7 +10,8 @@ import kotlinx.coroutines.launch
 import ni.edu.uam.nightbiteapp.data.local.session.SessionManager
 import ni.edu.uam.nightbiteapp.data.remote.dto.PlayerRequest
 import ni.edu.uam.nightbiteapp.data.repository.PlayerRepository
-import ni.edu.uam.nightbiteapp.ui.validation.Validators
+import ni.edu.uam.nightbiteapp.ui.validation.PlayerValidators
+import ni.edu.uam.nightbiteapp.ui.validation.PlayerValidators.formatPersonName
 
 class PlayerCreationViewModel(
     private val sessionManager: SessionManager,
@@ -21,30 +22,22 @@ class PlayerCreationViewModel(
     val uiState: StateFlow<PlayerCreationUiState> = _uiState
 
     val genderOptions = listOf("Femenino", "Masculino")
-    val helmetColorOptions = listOf("Negro", "Rojo", "Azul", "Blanco", "Amarillo")
-    val motorcycleTypeOptions = listOf("Estándar", "Scooter", "Deportiva", "Retro", "Delivery")
+    val helmetColorOptions = PlayerValidators.ALLOWED_HELMET_COLORS
+    val motorcycleTypeOptions = PlayerValidators.ALLOWED_MOTORCYCLE_TYPES
 
     fun onNicknameChange(value: String) {
-        val validationError =
-            Validators.validateNickname(value)
-
         _uiState.update {
             it.copy(
                 nickname = value,
-                nicknameError = validationError,
                 errorMessage = null
             )
         }
     }
 
     fun onDriverNameChange(value: String) {
-        val validationError =
-            Validators.validateDriverName(value)
-
         _uiState.update {
             it.copy(
-                driverName = value,
-                driverNameError = validationError,
+                driverName = formatSingleName(value),
                 errorMessage = null
             )
         }
@@ -54,7 +47,6 @@ class PlayerCreationViewModel(
         _uiState.update {
             it.copy(
                 gender = value,
-                genderError = null,
                 errorMessage = null
             )
         }
@@ -64,7 +56,6 @@ class PlayerCreationViewModel(
         _uiState.update {
             it.copy(
                 helmetColor = value,
-                helmetColorError = null,
                 errorMessage = null
             )
         }
@@ -74,7 +65,6 @@ class PlayerCreationViewModel(
         _uiState.update {
             it.copy(
                 motorcycleType = value,
-                motorcycleTypeError = null,
                 errorMessage = null
             )
         }
@@ -83,66 +73,33 @@ class PlayerCreationViewModel(
     fun createPlayer() {
         val currentState = _uiState.value
 
-        val nicknameError =
-            Validators.validateNickname(
-                currentState.nickname
-            )
-
-        val driverNameError =
-            Validators.validateDriverName(
-                currentState.driverName
-            )
-
-        if (
-            nicknameError != null ||
-            driverNameError != null
-        ) {
-
-            _uiState.update {
-                it.copy(
-                    nicknameError = nicknameError,
-                    driverNameError = driverNameError
-                )
-            }
-
+        val nicknameError = PlayerValidators.validateNickname(currentState.nickname)
+        if (nicknameError != null) {
+            showError(nicknameError)
             return
         }
 
-        val genderError =
-            if (currentState.gender.isBlank()) {
-                "Selecciona el género."
-            } else {
-                null
-            }
+        val driverNameError = PlayerValidators.validateDriverName(currentState.driverName)
+        if (driverNameError != null) {
+            showError(driverNameError)
+            return
+        }
 
-        val helmetColorError =
-            if (currentState.helmetColor.isBlank()) {
-                "Selecciona el color del casco."
-            } else {
-                null
-            }
+        val genderError = PlayerValidators.validateGender(currentState.gender)
+        if (genderError != null) {
+            showError(genderError)
+            return
+        }
 
-        val motorcycleTypeError =
-            if (currentState.motorcycleType.isBlank()) {
-                "Selecciona el tipo de moto."
-            } else {
-                null
-            }
+        val helmetColorError = PlayerValidators.validateHelmetColor(currentState.helmetColor)
+        if (helmetColorError != null) {
+            showError(helmetColorError)
+            return
+        }
 
-        if (
-            genderError != null ||
-            helmetColorError != null ||
-            motorcycleTypeError != null
-        ) {
-
-            _uiState.update {
-                it.copy(
-                    genderError = genderError,
-                    helmetColorError = helmetColorError,
-                    motorcycleTypeError = motorcycleTypeError
-                )
-            }
-
+        val motorcycleTypeError = PlayerValidators.validateMotorcycleType(currentState.motorcycleType)
+        if (motorcycleTypeError != null) {
+            showError(motorcycleTypeError)
             return
         }
 
@@ -170,11 +127,11 @@ class PlayerCreationViewModel(
 
                 val playerRequest = PlayerRequest(
                     userAccountId = userId,
-                    nickname = currentState.nickname.trim(),
+                    nickname = currentState.nickname.trim().lowercase(),
                     driverName = currentState.driverName.trim(),
                     gender = currentState.gender,
-                    helmetColor = currentState.helmetColor,
-                    motorcycleType = currentState.motorcycleType
+                    helmetColor = currentState.helmetColor.trim(),
+                    motorcycleType = currentState.motorcycleType.trim()
                 )
 
                 val response = playerRepository.createPlayer(playerRequest)
@@ -214,6 +171,20 @@ class PlayerCreationViewModel(
     private fun showError(message: String) {
         _uiState.update {
             it.copy(errorMessage = message)
+        }
+    }
+
+    private fun formatSingleName(value: String): String {
+        val cleanedValue = value
+            .replace(" ", "")
+            .lowercase()
+
+        return cleanedValue.replaceFirstChar { char ->
+            if (char.isLowerCase()) {
+                char.titlecase()
+            } else {
+                char.toString()
+            }
         }
     }
 }

@@ -1,5 +1,6 @@
 package ni.edu.uam.nightbiteapp.ui.screens
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -13,15 +14,14 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.Error
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
@@ -32,21 +32,27 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.launch
-import ni.edu.uam.nightbiteapp.ui.components.NightFloatingCloseButton
+import ni.edu.uam.nightbiteapp.R
 import ni.edu.uam.nightbiteapp.ui.components.NightMessageDialog
 import ni.edu.uam.nightbiteapp.ui.components.NightPrimaryButton
-import ni.edu.uam.nightbiteapp.ui.theme.CheeseYellow
-import ni.edu.uam.nightbiteapp.ui.theme.LavenderGray
-import ni.edu.uam.nightbiteapp.ui.theme.NightSurface
+import ni.edu.uam.nightbiteapp.ui.theme.DarkText
+import ni.edu.uam.nightbiteapp.ui.theme.LoginTabCyan
+import ni.edu.uam.nightbiteapp.ui.theme.NightBackground
 import ni.edu.uam.nightbiteapp.ui.theme.PizzaRed
 import ni.edu.uam.nightbiteapp.ui.theme.SmokeWhite
 import java.util.Calendar
+import ni.edu.uam.nightbiteapp.ui.theme.LilitaOne
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.ui.text.style.TextAlign
 
 /**
  * Pantalla para verificar la edad antes de permitir crear una cuenta.
@@ -68,7 +74,7 @@ fun AgeCheckScreen(
         (currentYear downTo 1900).toList()
     }
 
-    val itemHeight = 42.dp
+    val itemHeight = 36.dp
     val itemHeightPx = with(LocalDensity.current) {
         itemHeight.toPx()
     }
@@ -97,48 +103,54 @@ fun AgeCheckScreen(
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(MaterialTheme.colorScheme.background)
+            .background(NightBackground)
             .imePadding()
-            .padding(horizontal = 32.dp, vertical = 20.dp),
+            .padding(horizontal = 40.dp, vertical = 28.dp),
         contentAlignment = Alignment.Center
     ) {
         Box {
             Card(
+                modifier = Modifier
+                    .width(320.dp)
+                    .shadow(
+                        elevation = 8.dp,
+                        shape = RoundedCornerShape(28.dp)
+                    ),
                 shape = RoundedCornerShape(28.dp),
                 colors = CardDefaults.cardColors(
-                    containerColor = NightSurface
+                    containerColor = LoginTabCyan
                 ),
-                elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
+                elevation = CardDefaults.cardElevation(defaultElevation = 10.dp)
             ) {
                 Column(
                     modifier = Modifier
-                        .width(360.dp)
-                        .padding(horizontal = 28.dp, vertical = 22.dp),
+                        .fillMaxWidth()
+                        .padding(horizontal = 22.dp, vertical = 20.dp),
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.Center
                 ) {
                     Text(
                         text = "VERIFICAR EDAD",
-                        color = SmokeWhite,
-                        fontSize = 22.sp,
-                        fontWeight = FontWeight.Black
+                        color = DarkText,
+                        fontSize = 25.sp,
+                        fontFamily = LilitaOne,
+                        fontWeight = FontWeight.Normal,
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier.fillMaxWidth()
+                    )
+
+                    Spacer(modifier = Modifier.height(4.dp))
+
+                    Text(
+                        text = "Selecciona tu año de nacimiento",
+                        color = DarkText.copy(alpha = 0.72f),
+                        fontSize = 14.sp,
+                        fontWeight = FontWeight.Medium,
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier.fillMaxWidth()
                     )
 
                     Spacer(modifier = Modifier.height(6.dp))
-
-                    Text(
-                        text = "Desliza hasta tu año de nacimiento.",
-                        color = LavenderGray,
-                        fontSize = 12.sp
-                    )
-
-                    Text(
-                        text = "Debes tener 13 años o más.",
-                        color = LavenderGray,
-                        fontSize = 12.sp
-                    )
-
-                    Spacer(modifier = Modifier.height(14.dp))
 
                     YearPicker(
                         years = years,
@@ -152,11 +164,10 @@ fun AgeCheckScreen(
                         }
                     )
 
-                    Spacer(modifier = Modifier.height(16.dp))
+                    Spacer(modifier = Modifier.height(14.dp))
 
                     NightPrimaryButton(
                         text = "CONTINUAR",
-                        icon = Icons.Default.CheckCircle,
                         onClick = {
                             val age = currentYear - selectedYear
 
@@ -166,16 +177,21 @@ fun AgeCheckScreen(
                                 showUnderAgeDialog = true
                             }
                         },
-                        modifier = Modifier.width(280.dp)
+                        modifier = Modifier.width(120.dp)
                     )
                 }
             }
 
-            NightFloatingCloseButton(
-                onClick = onBackToLogin,
+            Image(
+                painter = painterResource(id = R.drawable.boton_cancelar),
+                contentDescription = "Cerrar",
                 modifier = Modifier
                     .align(Alignment.TopEnd)
-                    .offset(x = 18.dp, y = (-18).dp)
+                    .offset(x = 20.dp, y = (-20).dp)
+                    .width(72.dp)
+                    .clickable {
+                        onBackToLogin()
+                    }
             )
         }
 
@@ -199,16 +215,23 @@ fun AgeCheckScreen(
 private fun YearPicker(
     years: List<Int>,
     selectedYear: Int,
-    listState: androidx.compose.foundation.lazy.LazyListState,
+    listState: LazyListState,
     itemHeight: Dp,
     onYearClick: (Int) -> Unit
 ) {
     Column(
-        modifier = Modifier.width(220.dp),
+        modifier = Modifier
+            .width(280.dp)
+            .background(
+                color = Color(0xFF37A9AD),
+                shape = RoundedCornerShape(14.dp)
+            )
+            .padding(horizontal = 16.dp, vertical = 20.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         HorizontalDivider(
-            color = CheeseYellow.copy(alpha = 0.8f)
+            color = SmokeWhite,
+            thickness = 2.dp
         )
 
         LazyColumn(
@@ -227,7 +250,7 @@ private fun YearPicker(
                 Box(
                     modifier = Modifier
                         .height(itemHeight)
-                        .width(220.dp)
+                        .width(213.dp)
                         .clickable {
                             onYearClick(index)
                         },
@@ -235,9 +258,18 @@ private fun YearPicker(
                 ) {
                     Text(
                         text = year.toString(),
-                        color = if (isSelected) CheeseYellow else LavenderGray,
-                        fontSize = if (isSelected) 26.sp else 17.sp,
-                        fontWeight = if (isSelected) FontWeight.Black else FontWeight.Normal
+                        color = if (isSelected) {
+                            SmokeWhite
+                        } else {
+                            SmokeWhite.copy(alpha = 0.38f)
+                        },
+                        fontSize = if (isSelected) 35.sp else 23.sp,
+                        fontFamily = LilitaOne,
+                        fontWeight = if (isSelected) {
+                            FontWeight.Normal
+                        } else {
+                            FontWeight.Normal
+                        }
                     )
                 }
             }
@@ -248,7 +280,8 @@ private fun YearPicker(
         }
 
         HorizontalDivider(
-            color = CheeseYellow.copy(alpha = 0.8f)
+            color = SmokeWhite,
+            thickness = 2.dp
         )
     }
 }

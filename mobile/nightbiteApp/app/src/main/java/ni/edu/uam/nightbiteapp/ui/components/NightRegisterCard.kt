@@ -15,12 +15,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBackIosNew
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.Person
@@ -28,7 +25,6 @@ import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -86,42 +82,49 @@ fun NightRegisterCard(
     val anyPasswordVisible =
         passwordVisible || confirmPasswordVisible
 
-    Card(
-        shape = RoundedCornerShape(34.dp),
-        border = BorderStroke(
-            width = 7.dp,
-            color = DarkPurple
-        ),
-        colors = CardDefaults.cardColors(
-            containerColor = SoftPurple
-        ),
-        elevation = CardDefaults.cardElevation(defaultElevation = 10.dp),
+    val isPasswordValid =
+        password.isNotBlank() && passwordError == null
+
+    val isConfirmPasswordValid =
+        confirmPassword.isNotBlank() &&
+                confirmPasswordError == null &&
+                password == confirmPassword
+
+    Box(
         modifier = modifier.widthIn(
             min = 720.dp,
             max = 820.dp
-        )
+        ),
+        contentAlignment = Alignment.Center
     ) {
-        Box(
-            modifier = Modifier
-                .widthIn(min = 720.dp, max = 820.dp)
-                .verticalScroll(rememberScrollState())
-                .padding(
-                    start = 34.dp,
-                    end = 34.dp,
-                    top = 26.dp,
-                    bottom = 26.dp
-                )
+        Card(
+            shape = RoundedCornerShape(34.dp),
+            border = BorderStroke(
+                width = 7.dp,
+                color = DarkPurple
+            ),
+            colors = CardDefaults.cardColors(
+                containerColor = SoftPurple
+            ),
+            elevation = CardDefaults.cardElevation(defaultElevation = 10.dp),
+            modifier = Modifier.width(630.dp)
         ) {
             Row(
                 modifier = Modifier
-                    .align(Alignment.Center)
-                    .padding(top = 34.dp),
+                    .widthIn(min = 720.dp, max = 820.dp)
+                    .padding(
+                        start = 42.dp,
+                        end = 42.dp,
+                        top = 24.dp,
+                        bottom = 24.dp
+                    ),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.Center
             ) {
                 Column(
-                    modifier = Modifier.width(300.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally
+                    modifier = Modifier.width(285.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center
                 ) {
                     NightTextField(
                         value = username,
@@ -131,10 +134,9 @@ fun NightRegisterCard(
                         isError = usernameError != null,
                         errorMessage = usernameError,
                         reserveErrorSpace = true,
-                        modifier = Modifier.width(300.dp)
+                        fieldHeight = 54.dp,
+                        modifier = Modifier.width(285.dp)
                     )
-
-                    Spacer(modifier = Modifier.height(5.dp))
 
                     NightTextField(
                         value = email,
@@ -144,10 +146,9 @@ fun NightRegisterCard(
                         isError = emailError != null,
                         errorMessage = emailError,
                         reserveErrorSpace = true,
-                        modifier = Modifier.width(300.dp)
+                        fieldHeight = 54.dp,
+                        modifier = Modifier.width(285.dp)
                     )
-
-                    Spacer(modifier = Modifier.height(5.dp))
 
                     NightTextField(
                         value = password,
@@ -173,12 +174,12 @@ fun NightRegisterCard(
                             passwordVisible = !passwordVisible
                         },
                         isError = passwordError != null,
+                        isSuccess = isPasswordValid,
                         errorMessage = passwordError,
                         reserveErrorSpace = true,
-                        modifier = Modifier.width(300.dp)
+                        fieldHeight = 54.dp,
+                        modifier = Modifier.width(285.dp)
                     )
-
-                    Spacer(modifier = Modifier.height(5.dp))
 
                     NightTextField(
                         value = confirmPassword,
@@ -204,61 +205,67 @@ fun NightRegisterCard(
                             confirmPasswordVisible = !confirmPasswordVisible
                         },
                         isError = confirmPasswordError != null,
+                        isSuccess = isConfirmPasswordValid,
                         errorMessage = confirmPasswordError,
                         reserveErrorSpace = true,
-                        modifier = Modifier.width(300.dp)
+                        fieldHeight = 54.dp,
+                        modifier = Modifier.width(285.dp)
                     )
                 }
 
-                Spacer(modifier = Modifier.width(38.dp))
+                Spacer(modifier = Modifier.width(34.dp))
 
                 Box(
                     modifier = Modifier
                         .width(3.dp)
-                        .height(282.dp)
+                        .height(306.dp)
                         .background(SmokeWhite.copy(alpha = 0.9f))
                 )
 
-                Spacer(modifier = Modifier.width(38.dp))
+                Spacer(modifier = Modifier.width(50.dp))
 
                 Column(
-                    modifier = Modifier
-                        .width(250.dp)
-                        .offset(y = (-14).dp),
-                    horizontalAlignment = Alignment.CenterHorizontally
-                )  {
-                    Text(
-                        text = "Crear Cuenta",
-                        color = SmokeWhite,
-                        fontSize = 30.sp,
-                        fontWeight = FontWeight.Black,
-                        textAlign = TextAlign.Center,
-                        style = MaterialTheme.typography.headlineLarge.copy(
-                            shadow = Shadow(
-                                color = NightSurface,
-                                offset = Offset(2f, 2f),
-                                blurRadius = 3f
+                    modifier = Modifier.width(230.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center
+                ) {
+                    Column(
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Text(
+                            text = "CREAR CUENTA",
+                            color = SmokeWhite,
+                            fontSize = 25.sp,
+                            fontWeight = FontWeight.Black,
+                            letterSpacing = 2.2.sp,
+                            textAlign = TextAlign.Center,
+                            style = MaterialTheme.typography.headlineLarge.copy(
+                                shadow = Shadow(
+                                    color = NightSurface,
+                                    offset = Offset(2f, 2f),
+                                    blurRadius = 3f
+                                )
                             )
                         )
-                    )
 
-                    Text(
-                        text = "Regístrate para continuar",
-                        color = SmokeWhite,
-                        fontSize = 13.sp,
-                        fontWeight = FontWeight.Bold,
-                        textAlign = TextAlign.Center
-                    )
+                        Spacer(modifier = Modifier.height(4.dp))
 
-                    Spacer(modifier = Modifier.height(12.dp))
+                        Text(
+                            text = "Regístrate para continuar",
+                            color = SmokeWhite,
+                            fontSize = 14.sp,
+                            fontWeight = FontWeight.Bold,
+                            textAlign = TextAlign.Center
+                        )
+                    }
 
                     Box(
-                        modifier = Modifier.size(160.dp),
+                        modifier = Modifier.size(145.dp),
                         contentAlignment = Alignment.Center
                     ) {
                         Box(
                             modifier = Modifier
-                                .size(150.dp)
+                                .size(136.dp)
                                 .background(
                                     color = DarkPurple.copy(alpha = 0.55f),
                                     shape = CircleShape
@@ -267,9 +274,9 @@ fun NightRegisterCard(
 
                         Box(
                             modifier = Modifier
-                                .size(34.dp)
+                                .size(30.dp)
                                 .align(Alignment.TopEnd)
-                                .offset(x = 2.dp, y = 14.dp)
+                                .offset(x = 0.dp, y = 12.dp)
                                 .background(
                                     color = DarkPurple.copy(alpha = 0.7f),
                                     shape = CircleShape
@@ -278,9 +285,9 @@ fun NightRegisterCard(
 
                         Box(
                             modifier = Modifier
-                                .size(18.dp)
+                                .size(16.dp)
                                 .align(Alignment.TopEnd)
-                                .offset(x = 14.dp, y = 44.dp)
+                                .offset(x = 10.dp, y = 38.dp)
                                 .background(
                                     color = DarkPurple.copy(alpha = 0.7f),
                                     shape = CircleShape
@@ -289,9 +296,9 @@ fun NightRegisterCard(
 
                         Box(
                             modifier = Modifier
-                                .size(26.dp)
+                                .size(24.dp)
                                 .align(Alignment.BottomStart)
-                                .offset(x = 2.dp, y = (-24).dp)
+                                .offset(x = 4.dp, y = (-20).dp)
                                 .background(
                                     color = DarkPurple.copy(alpha = 0.7f),
                                     shape = CircleShape
@@ -307,45 +314,35 @@ fun NightRegisterCard(
                                 }
                             ),
                             contentDescription = "Icono de registro NightBite",
-                            modifier = Modifier.size(112.dp),
+                            modifier = Modifier.size(104.dp),
                             contentScale = ContentScale.Fit
                         )
                     }
 
-                    Spacer(modifier = Modifier.height(10.dp))
+                    Spacer(modifier = Modifier.height(14.dp))
 
                     NightPrimaryButton(
                         text = "REGISTRARSE",
                         onClick = onRegisterClick,
                         modifier = Modifier
-                            .width(180.dp)
-                            .height(42.dp)
+                            .width(170.dp)
+                            .height(40.dp)
                     )
                 }
             }
-
-            Row(
-                modifier = Modifier
-                    .align(Alignment.TopStart)
-                    .clickable {
-                        onBackToLoginClick()
-                    },
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Icon(
-                    imageVector = Icons.Default.ArrowBackIosNew,
-                    contentDescription = "Volver",
-                    tint = DarkPurple,
-                    modifier = Modifier.size(15.dp)
-                )
-
-                Text(
-                    text = "Volver",
-                    color = DarkPurple,
-                    fontSize = 17.sp,
-                    fontWeight = FontWeight.Black
-                )
-            }
         }
+
+        Image(
+            painter = painterResource(id = R.drawable.boton_volver),
+            contentDescription = "Volver",
+            modifier = Modifier
+                .align(Alignment.TopStart)
+                .offset(x = (-54).dp, y = (-4).dp)
+                .size(72.dp)
+                .clickable {
+                    onBackToLoginClick()
+                },
+            contentScale = ContentScale.Fit
+        )
     }
 }
