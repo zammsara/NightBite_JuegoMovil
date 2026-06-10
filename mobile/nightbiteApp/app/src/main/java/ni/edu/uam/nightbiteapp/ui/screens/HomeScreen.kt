@@ -72,6 +72,10 @@ fun HomeScreen(
         mutableStateOf(false)
     }
 
+    var showDeleteAccountDialog by remember {
+        mutableStateOf(false)
+    }
+
     LaunchedEffect(userId) {
         homeViewModel.loadHomeData(userId)
     }
@@ -212,6 +216,9 @@ fun HomeScreen(
                 userSession = userSession,
                 onNavigateToAccount = onNavigateToAccount,
                 onLogoutClick = onLogout,
+                onDeleteAccountClick = {
+                    showDeleteAccountDialog = true
+                },
                 onClosed = {
                     showSettingsPanel = false
                 }
