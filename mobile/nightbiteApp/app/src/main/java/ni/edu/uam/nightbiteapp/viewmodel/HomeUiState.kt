@@ -19,7 +19,13 @@ data class HomeUiState(
      * Controla la visualización del mensaje final
      * cuando la cuenta fue eliminada correctamente.
      */
-    val showAccountDeletedDialog: Boolean = false
+    val showAccountDeletedDialog: Boolean = false,
+
+    /**
+     * Indica que la solicitud de eliminación de cuenta
+     * se encuentra en ejecución.
+     */
+    val isDeletingAccount: Boolean = false
 
 ) {
     val hasPlayer: Boolean
