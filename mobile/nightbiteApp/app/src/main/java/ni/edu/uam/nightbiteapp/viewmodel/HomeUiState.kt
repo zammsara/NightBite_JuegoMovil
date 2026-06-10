@@ -9,22 +9,8 @@ data class HomeUiState(
     val levels: List<NightLevel> = emptyList(),
     val errorMessage: String? = null,
 
-    /**
-     * Controla la visualización del diálogo de confirmación
-     * previo a eliminar la cuenta.
-     */
     val showDeleteAccountDialog: Boolean = false,
-
-    /**
-     * Controla la visualización del mensaje final
-     * cuando la cuenta fue eliminada correctamente.
-     */
     val showAccountDeletedDialog: Boolean = false,
-
-    /**
-     * Indica que la solicitud de eliminación de cuenta
-     * se encuentra en ejecución.
-     */
     val isDeletingAccount: Boolean = false
 
 ) {
