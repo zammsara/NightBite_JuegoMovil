@@ -39,6 +39,8 @@ import ni.edu.uam.nightbiteapp.ui.screens.StartScreen
 import ni.edu.uam.nightbiteapp.ui.theme.CheeseYellow
 import ni.edu.uam.nightbiteapp.viewmodel.AccountCredentialsViewModel
 import ni.edu.uam.nightbiteapp.viewmodel.AccountCredentialsViewModelFactory
+import ni.edu.uam.nightbiteapp.viewmodel.HomeViewModel
+import ni.edu.uam.nightbiteapp.viewmodel.HomeViewModelFactory
 import ni.edu.uam.nightbiteapp.viewmodel.PlayerCreationViewModel
 import ni.edu.uam.nightbiteapp.viewmodel.PlayerCreationViewModelFactory
 import ni.edu.uam.nightbiteapp.viewmodel.StartViewModel
@@ -163,6 +165,10 @@ fun AppNavigation() {
         }
 
         composable(Routes.HOME) {
+            val homeViewModel: HomeViewModel = viewModel(
+                factory = HomeViewModelFactory(sessionManager)
+            )
+
             HomeScreen(
                 userId = activeUserId ?: userSession.userId,
                 userSession = userSession,
@@ -198,7 +204,8 @@ fun AppNavigation() {
                 },
                 onExitApp = {
                     activity?.finish()
-                }
+                },
+                homeViewModel = homeViewModel
             )
         }
 
