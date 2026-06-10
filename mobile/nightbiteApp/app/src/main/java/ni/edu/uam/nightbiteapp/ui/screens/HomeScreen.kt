@@ -279,12 +279,12 @@ fun HomeScreen(
 
             onConfirm = {
                 homeViewModel.dismissAccountDeletedDialog()
-
                 onAccountDeleted()
             },
 
             onDismiss = {
                 homeViewModel.dismissAccountDeletedDialog()
+                onAccountDeleted()
             }
         )
     }
