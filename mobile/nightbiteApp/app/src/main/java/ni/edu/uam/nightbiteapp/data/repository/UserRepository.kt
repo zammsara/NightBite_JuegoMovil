@@ -81,6 +81,15 @@ class UserRepository(
         return apiService.updatePassword(userId, request)
     }
 
+    /**
+     * Elimina una cuenta de usuario por su identificador.
+     */
+    suspend fun deleteUser(
+        userId: Long
+    ): Response<MessageResponse> {
+        return apiService.deleteUser(userId)
+    }
+
     suspend fun checkHealth(): Response<MessageResponse> {
         return apiService.checkHealth()
     }

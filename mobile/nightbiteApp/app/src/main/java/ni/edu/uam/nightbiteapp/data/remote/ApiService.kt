@@ -14,6 +14,7 @@ import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.Path
 import ni.edu.uam.nightbiteapp.data.remote.dto.MessageResponse
+import retrofit2.http.DELETE
 
 /**
  * Define los endpoints remotos que Android consumirá desde la API de Spring Boot.
@@ -70,4 +71,12 @@ interface ApiService {
         @Path("id") id: Long,
         @Body request: UpdatePasswordRequest
     ): Response<UserResponse>
+
+    /**
+     * Elimina una cuenta de usuario existente.
+     */
+    @DELETE("api/users/{id}")
+    suspend fun deleteUser(
+        @Path("id") id: Long
+    ): Response<MessageResponse>
 }

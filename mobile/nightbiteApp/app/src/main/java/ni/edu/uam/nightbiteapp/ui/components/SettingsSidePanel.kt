@@ -83,7 +83,6 @@ fun SettingsPanelOverlay(
 ) {
     var visible by remember { mutableStateOf(false) }
     var logoutAfterClose by remember { mutableStateOf(false) }
-    var showLogoutDialog by remember { mutableStateOf(false) }
 
     LaunchedEffect(Unit) {
         visible = true
@@ -156,7 +155,7 @@ fun SettingsPanelOverlay(
                     userSession = userSession,
                     onNavigateToAccount = onNavigateToAccount,
                     onLogoutClick = {
-                        showLogoutDialog = true
+                        closePanelAndLogout()
                     },
                     onBack = {
                         closePanel()
@@ -170,22 +169,6 @@ fun SettingsPanelOverlay(
                 )
             }
         }
-    }
-
-    if (showLogoutDialog) {
-        NightMessageDialog(
-            title = "Cerrar sesión",
-            message = "¿Estás seguro de que deseas cerrar sesión?",
-            confirmText = "Cerrar sesión",
-            dismissText = "Cancelar",
-            onConfirm = {
-                showLogoutDialog = false
-                closePanelAndLogout()
-            },
-            onDismiss = {
-                showLogoutDialog = false
-            }
-        )
     }
 }
 
