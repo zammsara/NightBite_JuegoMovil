@@ -217,7 +217,7 @@ fun HomeScreen(
                 onNavigateToAccount = onNavigateToAccount,
                 onLogoutClick = onLogout,
                 onDeleteAccountClick = {
-                    showDeleteAccountDialog = true
+                    homeViewModel.showDeleteAccountDialog()
                 },
                 onClosed = {
                     showSettingsPanel = false
