@@ -1,5 +1,6 @@
 package ni.edu.uam.nightbiteapp.ui.components
 
+import android.R.attr.onClick
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
@@ -79,6 +80,7 @@ fun SettingsPanelOverlay(
     userSession: UserSession,
     onNavigateToAccount: () -> Unit,
     onLogoutClick: () -> Unit,
+    onDeleteAccountClick: () -> Unit,
     onClosed: () -> Unit
 ) {
     var visible by remember { mutableStateOf(false) }
@@ -157,6 +159,7 @@ fun SettingsPanelOverlay(
                     onLogoutClick = {
                         closePanelAndLogout()
                     },
+                    onDeleteAccountClick = onDeleteAccountClick,
                     onBack = {
                         closePanel()
                     },
@@ -177,6 +180,7 @@ fun SettingsSidePanel(
     userSession: UserSession,
     onNavigateToAccount: () -> Unit,
     onLogoutClick: () -> Unit,
+    onDeleteAccountClick: () -> Unit,
     onBack: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -244,7 +248,8 @@ fun SettingsSidePanel(
                             SettingsProfileContent(
                                 userSession = userSession,
                                 onNavigateToAccount = onNavigateToAccount,
-                                onLogoutClick = onLogoutClick
+                                onLogoutClick = onLogoutClick,
+                                onDeleteAccountClick = onDeleteAccountClick
                             )
                         }
                     }
@@ -482,7 +487,8 @@ private fun SettingsVolumeContent(
 private fun SettingsProfileContent(
     userSession: UserSession,
     onNavigateToAccount: () -> Unit,
-    onLogoutClick: () -> Unit
+    onLogoutClick: () -> Unit,
+    onDeleteAccountClick: () -> Unit
 ) {
     val displayId = userSession.userId?.let { id ->
         UserDisplayIdGenerator.generate(
@@ -582,9 +588,7 @@ private fun SettingsProfileContent(
             containerColor = Color.Transparent,
             contentColor = SettingsPanelDarkPink,
             borderColor = SettingsPanelDarkPink.copy(alpha = 0.80f),
-            onClick = {
-                // Pendiente: implementar eliminación de cuenta.
-            }
+            onClick = onDeleteAccountClick
         )
     }
 }
