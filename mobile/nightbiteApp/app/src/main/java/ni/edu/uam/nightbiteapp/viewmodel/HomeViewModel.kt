@@ -9,9 +9,11 @@ import kotlinx.coroutines.launch
 import ni.edu.uam.nightbiteapp.data.local.mock.NightLevelsData
 import ni.edu.uam.nightbiteapp.data.repository.UserRepository
 import ni.edu.uam.nightbiteapp.data.local.mock.NightProgressData
+import ni.edu.uam.nightbiteapp.data.local.session.SessionManager
 
 class HomeViewModel(
-    private val userRepository: UserRepository = UserRepository()
+    private val userRepository: UserRepository = UserRepository(),
+    private val sessionManager: SessionManager
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(
@@ -136,7 +138,7 @@ class HomeViewModel(
 
             _uiState.update {
                 it.copy(
-                    isLoading = true,
+                    isDeletingAccount = true,
                     showDeleteAccountDialog = false,
                     errorMessage = null
                 )
@@ -148,9 +150,11 @@ class HomeViewModel(
 
                 if (response.isSuccessful) {
 
+                    sessionManager.clearSession()
+
                     _uiState.update {
                         it.copy(
-                            isLoading = false,
+                            isDeletingAccount = false,
                             showAccountDeletedDialog = true
                         )
                     }
@@ -159,7 +163,7 @@ class HomeViewModel(
 
                     _uiState.update {
                         it.copy(
-                            isLoading = false,
+                            isDeletingAccount = false,
                             errorMessage = "No se pudo eliminar la cuenta."
                         )
                     }
@@ -170,7 +174,7 @@ class HomeViewModel(
 
                 _uiState.update {
                     it.copy(
-                        isLoading = false,
+                        isDeletingAccount = false,
                         errorMessage = "Error de conexión con la API."
                     )
                 }
