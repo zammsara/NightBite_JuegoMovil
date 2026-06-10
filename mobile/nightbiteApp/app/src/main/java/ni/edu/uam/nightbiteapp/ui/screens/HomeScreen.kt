@@ -57,6 +57,7 @@ fun HomeScreen(
     onNavigateToAchievements: () -> Unit,
     onNavigateToAccount: () -> Unit,
     onLogout: () -> Unit,
+    onAccountDeleted: () -> Unit,
     onExitApp: () -> Unit,
     homeViewModel: HomeViewModel = viewModel()
 ) {
@@ -278,6 +279,8 @@ fun HomeScreen(
 
             onConfirm = {
                 homeViewModel.dismissAccountDeletedDialog()
+
+                onAccountDeleted()
             },
 
             onDismiss = {
