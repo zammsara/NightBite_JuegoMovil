@@ -29,6 +29,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogProperties
 import ni.edu.uam.nightbiteapp.ui.theme.CheeseYellow
 import ni.edu.uam.nightbiteapp.ui.theme.LavenderGray
 import ni.edu.uam.nightbiteapp.ui.theme.NightSurface
@@ -57,7 +58,7 @@ fun NightMessageDialog(
     Dialog(
         onDismissRequest = {
             onDismiss?.invoke()
-        }
+        },
     ) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
