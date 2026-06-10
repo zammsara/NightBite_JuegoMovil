@@ -43,7 +43,8 @@ fun NightTextField(
     trailingIcon: ImageVector? = null,
     trailingIconDescription: String? = null,
     onTrailingIconClick: (() -> Unit)? = null,
-    reserveErrorSpace: Boolean = false
+    reserveErrorSpace: Boolean = false,
+    fieldHeight: Dp = 60.dp
 ) {
     val indicatorColor = when {
         isError -> PizzaRed
