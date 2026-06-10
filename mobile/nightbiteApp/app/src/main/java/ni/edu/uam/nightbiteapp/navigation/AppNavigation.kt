@@ -202,6 +202,24 @@ fun AppNavigation() {
                         }
                     }
                 },
+                onAccountDeleted = {
+                    activeUserId = null
+
+                    coroutineScope.launch {
+
+                        sessionManager.clearSession()
+
+                        navController.navigate(Routes.LOGIN) {
+
+                            popUpTo(Routes.HOME) {
+                                inclusive = true
+                            }
+
+                            launchSingleTop = true
+                        }
+                    }
+
+                },
                 onExitApp = {
                     activity?.finish()
                 },
