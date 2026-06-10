@@ -169,6 +169,12 @@ public class UserAccountService {
 
         String normalizedUsername = username.trim();
 
+        if (normalizedUsername.length() < 4) {
+            throw new RuntimeException(
+                    "El nombre de usuario debe tener al menos 4 caracteres"
+            );
+        }
+
         if (normalizedUsername.contains(" ")) {
             throw new RuntimeException("El nombre de usuario no debe contener espacios");
         }
