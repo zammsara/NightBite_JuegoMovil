@@ -243,6 +243,28 @@ fun HomeScreen(
             }
         )
     }
+
+    if (uiState.showDeleteAccountDialog) {
+
+        NightMessageDialog(
+            title = "Eliminar cuenta",
+            message =
+                "Se eliminarán tu perfil y tu progreso de NightBite.\n\n" +
+                        "Esta acción no se puede deshacer.",
+            confirmText = "Eliminar",
+            dismissText = "Cancelar",
+            icon = Icons.Default.Warning,
+            iconColor = CheeseYellow,
+
+            onConfirm = {
+                homeViewModel.deleteAccount()
+            },
+
+            onDismiss = {
+                homeViewModel.dismissDeleteAccountDialog()
+            }
+        )
+    }
 }
 
 @Composable
