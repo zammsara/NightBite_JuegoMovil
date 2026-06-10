@@ -265,6 +265,26 @@ fun HomeScreen(
             }
         )
     }
+
+    if (uiState.showAccountDeletedDialog) {
+
+        NightMessageDialog(
+            title = "Cuenta eliminada",
+            message = "Tu cuenta fue eliminada correctamente.",
+            confirmText = "Aceptar",
+            dismissText = null,
+            icon = Icons.Default.Warning,
+            iconColor = CheeseYellow,
+
+            onConfirm = {
+                homeViewModel.dismissAccountDeletedDialog()
+            },
+
+            onDismiss = {
+                homeViewModel.dismissAccountDeletedDialog()
+            }
+        )
+    }
 }
 
 @Composable
