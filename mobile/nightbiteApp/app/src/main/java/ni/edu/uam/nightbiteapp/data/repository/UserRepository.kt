@@ -82,7 +82,7 @@ class UserRepository(
     }
 
     /**
-     * Elimina una cuenta de usuario por su identificador.
+     * Elimina una cuenta de usuario.
      */
     suspend fun deleteUser(
         userId: Long
