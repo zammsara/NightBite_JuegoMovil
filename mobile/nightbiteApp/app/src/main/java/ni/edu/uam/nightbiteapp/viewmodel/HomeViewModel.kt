@@ -87,4 +87,95 @@ class HomeViewModel(
             it.copy(errorMessage = null)
         }
     }
+
+    /**
+     * Solicita mostrar el diálogo de confirmación
+     * para eliminar la cuenta del usuario.
+     */
+    fun showDeleteAccountDialog() {
+        _uiState.update {
+            it.copy(
+                showDeleteAccountDialog = true
+            )
+        }
+    }
+
+    /**
+     * Oculta el diálogo de confirmación
+     * de eliminación de cuenta.
+     */
+    fun dismissDeleteAccountDialog() {
+        _uiState.update {
+            it.copy(
+                showDeleteAccountDialog = false
+            )
+        }
+    }
+
+    /**
+     * Oculta el mensaje mostrado después
+     * de eliminar la cuenta correctamente.
+     */
+    fun dismissAccountDeletedDialog() {
+        _uiState.update {
+            it.copy(
+                showAccountDeletedDialog = false
+            )
+        }
+    }
+
+    /**
+     * Elimina la cuenta actualmente cargada
+     * en el HomeUiState.
+     */
+    fun deleteAccount() {
+
+        val userId = _uiState.value.user?.id ?: return
+
+        viewModelScope.launch {
+
+            _uiState.update {
+                it.copy(
+                    isLoading = true,
+                    showDeleteAccountDialog = false,
+                    errorMessage = null
+                )
+            }
+
+            try {
+
+                val response = userRepository.deleteUser(userId)
+
+                if (response.isSuccessful) {
+
+                    _uiState.update {
+                        it.copy(
+                            isLoading = false,
+                            showAccountDeletedDialog = true
+                        )
+                    }
+
+                } else {
+
+                    _uiState.update {
+                        it.copy(
+                            isLoading = false,
+                            errorMessage = "No se pudo eliminar la cuenta."
+                        )
+                    }
+
+                }
+
+            } catch (e: Exception) {
+
+                _uiState.update {
+                    it.copy(
+                        isLoading = false,
+                        errorMessage = "Error de conexión con la API."
+                    )
+                }
+
+            }
+        }
+    }
 }
